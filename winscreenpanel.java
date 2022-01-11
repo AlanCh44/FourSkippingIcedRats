@@ -37,7 +37,7 @@ public class winscreenpanel extends JPanel implements ActionListener{
 		returnbut.setLocation(690, 520);
 		this.add(returnbut);
 		
-		
+		//load image
 		try{
 			winscreen = ImageIO.read(new File("Win Screen without buttons.png"));
 		}catch(IOException e){
