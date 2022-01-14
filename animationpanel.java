@@ -18,6 +18,7 @@ public class animationpanel extends JPanel implements ActionListener{
 	int intGrayDefX = 0;
 	int intGrayDefY = 0;
 	int intPlatformY = 585; //x stays constant(draw with g)
+	boolean blnJump = false;
 	
 	Rectangle theground = new Rectangle();
 	Rectangle theplatform = new Rectangle();
@@ -41,14 +42,12 @@ public class animationpanel extends JPanel implements ActionListener{
 			
 		}
 		
-		//character jumps 110 pixels
-		
-		/*
-		if(intGrayY < 410 && intGrayX < 210){
+		//jumping physics
+		if(blnJump == true){
+			intGrayDefY = -10;
+		}else if(blnJump == false){
 			intGrayDefY = 10;
 		}
-		*/
-		
 		
 		/*
 		//adjust so that only if your on the side and intersects

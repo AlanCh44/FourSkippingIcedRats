@@ -13,7 +13,6 @@ public class charactermovementprototype implements KeyListener, ActionListener{
 	BufferedImage greenrat = null;
 	Timer thetimer = new Timer(1000/60, this);
 	long jumpingtime = 200;
-	boolean blnJump = true;
 	
 	
 	
@@ -27,10 +26,8 @@ public class charactermovementprototype implements KeyListener, ActionListener{
 			thepanel.intGrayDefX = 0;
 		}else if(evt.getKeyChar() == 'd'){
 			thepanel.intGrayDefX = 0;
-		}else if(evt.getKeyChar() == 'w'){
-			thepanel.intGrayDefY = -10;
-			//blnGround = true;
 		}
+		
 	}
 	
 	public void keyPressed(KeyEvent evt){
@@ -39,28 +36,27 @@ public class charactermovementprototype implements KeyListener, ActionListener{
 			thepanel.intGrayDefX = -3;
 		}else if(evt.getKeyChar() == 'd'){
 			thepanel.intGrayDefX = 3;
-		}
-		/*
+		
 		}else if(evt.getKeyChar() == 'w'){
-			blnJump = true;
+			thepanel.blnJump = true;
+			//starts thread method
 			new Thread(new thread()).start();
-			if(blnJump == true){
-				thepanel.intGrayDefY = -10;
-			}
+			
 			//thepanel.intGrayDefY = -10;
 			
 		}
-		*/
+		
+		
 	}
 	
 	public void keyTyped(KeyEvent evt){
 		/*
-		if(evt.getKeyChar() == 'w' && blnJump == false){
-			blnJump = true;
-			thepanel.intGrayDefY = -10;
-			System.out.println(blnJump);
+		if(evt.getKeyChar() == 'w'){
+			thepanel.blnJump = true;
+			new Thread(new thread()).start();
 		}
 		*/
+		
 		
 	}
 	
@@ -78,13 +74,16 @@ public class charactermovementprototype implements KeyListener, ActionListener{
 	public class thread implements Runnable{
 		public void run(){
 			try{
-				Thread.sleep(200);
-				blnJump = false;
+				//disables jump over certain time (prevents float)
+				Thread.sleep(jumpingtime);
+				thepanel.blnJump = false;
 				
 			}catch(InterruptedException e){
+				
 				e.printStackTrace();
 				new Thread(this).start();
 				System.exit(0);
+				
 			}
 		}
 	}
