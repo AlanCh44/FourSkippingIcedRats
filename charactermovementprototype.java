@@ -11,13 +11,14 @@ public class charactermovementprototype implements KeyListener, ActionListener{
 	animationpanel thepanel = new animationpanel();
 	BufferedImage yellowrat = null;
 	BufferedImage greenrat = null;
+	BufferedImage lazer = null;
 	Timer thetimer = new Timer(1000/60, this);
 	long jumpingtime = 200;
+	String strColor = "gray";
+	//****need one class that represents an object in the game
 	
-	
-	
-	//methods
-	
+	//keeps track of which panel player is in
+	String strPanel;
 	
 	
 	public void keyReleased(KeyEvent evt){
@@ -31,7 +32,6 @@ public class charactermovementprototype implements KeyListener, ActionListener{
 	}
 	
 	public void keyPressed(KeyEvent evt){
-		
 		if(evt.getKeyChar() == 'a'){
 			thepanel.intGrayDefX = -3;
 		}else if(evt.getKeyChar() == 'd'){
@@ -41,21 +41,13 @@ public class charactermovementprototype implements KeyListener, ActionListener{
 			thepanel.blnJump = true;
 			//starts thread method
 			new Thread(new thread()).start();
-			
-			//thepanel.intGrayDefY = -10;
-			
+		
 		}
 		
 		
 	}
 	
 	public void keyTyped(KeyEvent evt){
-		/*
-		if(evt.getKeyChar() == 'w'){
-			thepanel.blnJump = true;
-			new Thread(new thread()).start();
-		}
-		*/
 		
 		
 	}
@@ -88,14 +80,9 @@ public class charactermovementprototype implements KeyListener, ActionListener{
 		}
 	}
 	
-	
-	
-	
 	//constructor
 	public charactermovementprototype(){
 		
-		//thepanel.setLayout(null);
-		//thepanel.setPreferredSize(new Dimension(1280, 720));
 		theframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		theframe.setContentPane(thepanel);
 		theframe.pack();
@@ -103,7 +90,6 @@ public class charactermovementprototype implements KeyListener, ActionListener{
 		theframe.setVisible(true);
 		
 		theframe.addKeyListener(this);
-		
 	}
 	
 	//main method
