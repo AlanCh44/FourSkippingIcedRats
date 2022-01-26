@@ -10,9 +10,11 @@ import java.awt.image.BufferedImage;
 
 public class mainmenu1panel extends JPanel implements ActionListener{
 	// properties
+	private mainprogram myMainForm;
 	Timer thetimer = new Timer(1000/60, this);
 	SuperSocketMaster ssm;
 	JButton serverbut = new JButton("Server Mode");
+	JButton readybut = new JButton("Ready");
 	JButton clientbut = new JButton("Client Mode");
 	JTextField IPinput = new JTextField();
 	JTextField usernameinput = new JTextField();
@@ -21,18 +23,32 @@ public class mainmenu1panel extends JPanel implements ActionListener{
 	Font thefont = new Font("Courier New", Font.PLAIN, 125);
 	BufferedImage background = null;
 	String strUser;
-	int intHost = 0;
+	boolean blnHost = true;
+	int intPlayerCount = 1;
+	String strLineSplit[];
 	String strIP;
-	
+	boolean blnReady = false;
 	// methods
 	public void actionPerformed(ActionEvent evt){
 		/// repaint
 		if(evt.getSource() == thetimer){
 			this.repaint();
 		}
-		/// ssm
+		//ssm
 		if(evt.getSource() == ssm){
+			/// Split
+			String strLine = ssm.readText();
+			strLineSplit = strLine.split(",");
 			
+			if(strLineSplit[0].equals("Connect")){
+				if(blnHost == true){
+					intPlayerCount = intPlayerCount + 1;
+					System.out.println("Players Count: "+intPlayerCount);
+					if(intPlayerCount == 2){
+						readybut.setEnabled(true);
+					}
+				}
+			}
 		}
 		/// Username
 		if(evt.getSource() == usernameinput){
@@ -45,7 +61,7 @@ public class mainmenu1panel extends JPanel implements ActionListener{
 			ssm = new SuperSocketMaster(2188, this);
 			IPinput.setText(ssm.getMyAddress());
 			ssm.connect();
-			intHost = 1;
+			blnHost = true;
 			serverbut.setEnabled(false);
 			clientbut.setEnabled(false);
 		/// Client
@@ -53,19 +69,26 @@ public class mainmenu1panel extends JPanel implements ActionListener{
 			serverbut.setEnabled(false);
 			clientbut.setEnabled(false);
 			IPinput.setEnabled(true);
-			intHost = 0;
+			blnHost = false;
 		}else if(evt.getSource() == IPinput){
 			strIP = IPinput.getText();
 			ssm = new SuperSocketMaster(strIP, 2188, this);
 			ssm.connect();
 			ssm.sendText("Connect,"+strUser);
 			IPinput.setEnabled(false);
+		}else if(evt.getSource() == readybut){
+			blnReady = true;
+			System.out.println("READY");
+		
 		}
+		
 	}
 	
 	public void paintComponent(Graphics g){
 		g.drawImage(background, 0, 0, null);
 	}
+	
+	
 	// contructor
 	public mainmenu1panel(){
 		super();
@@ -73,12 +96,20 @@ public class mainmenu1panel extends JPanel implements ActionListener{
 		this.setLayout(null);
 		thetimer.start();
 	
+	
 		// serverbut
 		serverbut.setSize(150, 50);
 		serverbut.setLocation(465, 650);
 		serverbut.addActionListener(this);
 		this.add(serverbut);
 		serverbut.setEnabled(false);
+		
+		// readybut
+		readybut.setSize(150, 50);
+		readybut.setLocation(1100, 650);
+		readybut.addActionListener(this);
+		
+		readybut.setEnabled(false);
 		
 		// clientbut
 		clientbut.setSize(150, 50);
@@ -119,6 +150,8 @@ public class mainmenu1panel extends JPanel implements ActionListener{
 			System.out.println("Unable to load image file");
 		}
 	}
+	
+
 
 
 
