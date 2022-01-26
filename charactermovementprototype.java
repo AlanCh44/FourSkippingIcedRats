@@ -8,40 +8,41 @@ import javax.swing.event.*;
 public class charactermovementprototype implements KeyListener, ActionListener{
 	//properties
 	JFrame theframe = new JFrame("Testing movement");
-	animationpanel thepanel = new animationpanel();
-	BufferedImage yellowrat = null;
-	BufferedImage greenrat = null;
-	BufferedImage lazer = null;
+	//animationpanel thepanel = new animationpanel();
+	level1 thepanel = new level1();
 	Timer thetimer = new Timer(1000/60, this);
 	long jumpingtime = 200;
-	String strColor = "gray";
+	String strColor = "gray"; //player will be assigned a colour depending on when they join. However, server is always gray
 	//****need one class that represents an object in the game
 	
 	//keeps track of which panel player is in
 	String strPanel;
 	
+	//if(thepanel.equals) ... data will be taken from mainmenu panels
 	
+	//stops characters from moving after key release
 	public void keyReleased(KeyEvent evt){
 		
 		if(evt.getKeyChar() == 'a'){
 			thepanel.intGrayDefX = 0;
+			
 		}else if(evt.getKeyChar() == 'd'){
 			thepanel.intGrayDefX = 0;
+			
 		}
 		
 	}
 	
+	//character movement from keys
 	public void keyPressed(KeyEvent evt){
 		if(evt.getKeyChar() == 'a'){
 			thepanel.intGrayDefX = -3;
 		}else if(evt.getKeyChar() == 'd'){
 			thepanel.intGrayDefX = 3;
-		
 		}else if(evt.getKeyChar() == 'w'){
-			thepanel.blnJump = true;
+			thepanel.blnJumpGray = true;
 			//starts thread method
 			new Thread(new thread()).start();
-		
 		}
 		
 		
@@ -53,9 +54,6 @@ public class charactermovementprototype implements KeyListener, ActionListener{
 	}
 	
 	public void paintComponent(Graphics g){
-		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, 1280, 720);
-		g.drawImage(yellowrat, 0, 0, null);
 		
 	}
 	
@@ -68,7 +66,7 @@ public class charactermovementprototype implements KeyListener, ActionListener{
 			try{
 				//disables jump over certain time (prevents float)
 				Thread.sleep(jumpingtime);
-				thepanel.blnJump = false;
+				thepanel.blnJumpGray = false;
 				
 			}catch(InterruptedException e){
 				

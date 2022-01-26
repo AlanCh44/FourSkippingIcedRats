@@ -37,9 +37,9 @@ public class animationpanel extends JPanel implements ActionListener{
 	public void paintComponent(Graphics g){
 		Rectangle grayratrect = new Rectangle(intGrayX, intGrayY, 100, 100);
 		graybox = new Rectangle(intBoxX, intBoxY, 136, 117);
-		//rats.drawImage(background, 0, 0, null);
-		//g.drawImage(grayrat,intGrayX,intGrayY,null);
-		rats player = new rats("gray", intGrayX, intGrayY);
+		g.drawImage(background, 0, 0, null);
+		g.drawImage(grayrat,intGrayX,intGrayY,null);
+		//rats player = new rats("gray", intGrayX, intGrayY);
 		g.drawImage(lazerimg, intBoxX + 136, 206, null);
 		intGrayX = intGrayX + intGrayDefX;
 		intGrayY = intGrayY + intGrayDefY;

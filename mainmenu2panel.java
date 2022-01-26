@@ -28,17 +28,14 @@ public class mainmenu2panel extends JPanel implements ActionListener{
 		this.setPreferredSize(new Dimension(1280, 720));
 		this.setLayout(null);
 		
-		//button brings player to interactive tutorial
 		thehelpscreenbut.setSize(350, 70);
 		thehelpscreenbut.setLocation(46, 20);
 		add(thehelpscreenbut);
 		
-		//button starts the game at level 1
 		playgame.setSize(350, 70);
 		playgame.setLocation(442, 20);
 		add(playgame);
 		
-		//button brings player to level select
 		levelselectbut.setSize(350, 70);
 		levelselectbut.setLocation(838, 20);
 		add(levelselectbut);
