@@ -30,15 +30,15 @@ public class mainmenu2panel extends JPanel implements ActionListener{
 		
 		thehelpscreenbut.setSize(350, 70);
 		thehelpscreenbut.setLocation(46, 20);
-		add(thehelpscreenbut);
+		//add(thehelpscreenbut);
 		
 		playgame.setSize(350, 70);
 		playgame.setLocation(442, 20);
-		add(playgame);
+		//add(playgame);
 		
 		levelselectbut.setSize(350, 70);
 		levelselectbut.setLocation(838, 20);
-		add(levelselectbut);
+		//add(levelselectbut);
 		
 		try{
 			background = ImageIO.read(new File("Menu design(without rats).png"));

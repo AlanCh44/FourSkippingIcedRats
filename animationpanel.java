@@ -51,11 +51,13 @@ public class animationpanel extends JPanel implements ActionListener{
 		//boundaries
 		
 		//general floor
+		
 		if(intGrayY > 520){
 			intGrayY = 520;
 			intGrayDefY = 0;
 			
 		}
+		
 		//platform boundary
 		if(intPlatformY < 305){
 			intPlatformY = intPlatformY+5;
@@ -132,8 +134,10 @@ public class animationpanel extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent evt){
 		if(evt.getSource() == thetimer){
 			this.repaint();
+			/*
 			System.out.println("X: "+intGrayX);
 			System.out.println("Y: "+intGrayY);
+			*/
 		}
 	}
 	

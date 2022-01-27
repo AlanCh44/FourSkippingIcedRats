@@ -43,9 +43,11 @@ public class level1 extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent evt){
 		if(evt.getSource() == thetimer){
 			this.repaint();
+			/*
 			System.out.println("X: "+intGrayX);
 			System.out.println("Y: "+intGrayY);
 			System.out.println("jump: "+blnJumpGray);
+			*/
 		}
 	}
 	

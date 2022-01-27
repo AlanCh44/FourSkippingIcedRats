@@ -24,6 +24,8 @@ public class levelselect extends JPanel {
 	// Constructor
 	public levelselect() {
 		super();
+		this.setLayout(null);
+		this.setPreferredSize(new Dimension(1280, 720));
 
 		// Image
 		try {
