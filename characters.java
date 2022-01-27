@@ -8,6 +8,8 @@ import javax.swing.event.*;
 public class characters{
 	//properties
 	String strColor;
+	int intHeight = 100;
+	int intWidth = 100;
 	int intX;
 	int intY;
 	int intNewY;
@@ -28,13 +30,17 @@ public class characters{
 	
 	public String assigncolor(){
 		if(intPlayerJoin == 1){
-			return "gray";
+			strColor = "gray";
+			return strColor;
 		}else if(intPlayerJoin == 2){
-			return "purple";
+			strColor = "purple";
+			return strColor;
 		}else if(intPlayerJoin == 3){
-			return "green";
+			strColor = "green";
+			return strColor;
 		}else if(intPlayerJoin == 4){
-			return "yellow";
+			strColor = "yellow";
+			return strColor;
 		}
 		
 		return strColor;
@@ -43,11 +49,6 @@ public class characters{
 	public int stopmoving(){
 		//makes character stop moving
 		return 0;
-	}
-	
-	public int stackcharacter(){
-		intNewY = intY + 100;
-		return intNewY;
 	}
 	
 	//constructor

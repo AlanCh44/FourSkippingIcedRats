@@ -71,6 +71,9 @@ public class buttonpanel extends JPanel implements ActionListener {
 	boolean blnCheese1 = true;
 	boolean blnCheese2 = true;
 
+	//win condition
+	boolean blnWin = false;
+	
 	// Methods
 	public void paintComponent(Graphics g) {
 		// Hit Boxes
@@ -87,6 +90,8 @@ public class buttonpanel extends JPanel implements ActionListener {
 		g.drawImage(yellowrat,intYellowX, intYellowY, null);
 		g.drawImage(purplerat,intPurpleX, intPurpleY, null);
 		g.drawImage(greenrat,intGreenX, intGreenY, null);
+		g.setColor(new Color(76, 175, 80));
+		g.fillRect(500, 440, 400, 30);
 		// Buttons / Lose
 		if(grayratrect.intersects(button) || purpleratrect.intersects(button) || yellowratrect.intersects(button) || greenratrect.intersects(button)) {
 			g.drawImage(buttonpressedimg, intButtonX, intButtonY, null);
@@ -163,6 +168,13 @@ public class buttonpanel extends JPanel implements ActionListener {
 		} else {
 			g.drawImage(buttonimg, intButton3X, intButtonY, null);
 		}
+		
+		//platform
+		if(intGreenX > 425 && intGreenX < 865 && intGreenY < 400){
+			if(intGreenY > 340){
+				intGreenY = 340;
+			}
+		}
 
 		// Cheese
 		if (grayratrect.intersects(cheeserect) || yellowratrect.intersects(cheeserect) || purpleratrect.intersects(cheeserect) || greenratrect.intersects(cheeserect)) {
@@ -178,6 +190,7 @@ public class buttonpanel extends JPanel implements ActionListener {
 		// Win
 		if (blnCheese1 == false && blnCheese2 == false) {
 			System.out.println("Win");
+			blnWin = true;
 		}
 		// Defs
 		intGrayX = intGrayX + intGrayDefX;
@@ -190,7 +203,70 @@ public class buttonpanel extends JPanel implements ActionListener {
 		intYellowY = intYellowY + intYellowDefY;
 
 		// Stacking
-
+		
+		//purple gray 
+		if(purpleratrect.intersects(grayratrect)){
+			if(intPurpleY < intGrayY){
+				intPurpleY = intGrayY - 100;
+			}else if(intPurpleY > intGrayY){
+				intGrayY = intPurpleY - 100;
+			}else{
+				intGrayY = intPurpleY - 100;
+			}
+		}
+		//purple green
+		if(purpleratrect.intersects(greenratrect)){
+			if(intPurpleY < intGreenY){
+				intPurpleY = intGreenY - 100;
+			}else if(intPurpleY > intGreenY){
+				intGreenY = intPurpleY - 100;
+			}else{
+				intGreenY = intPurpleY - 100;
+			}
+		}
+		//purple yellow
+		if(purpleratrect.intersects(yellowratrect)){
+			if(intPurpleY < intYellowY){
+				intPurpleY = intYellowY - 100;
+			}else if(intPurpleY > intYellowY){
+				intYellowY = intPurpleY - 100;
+			}else{
+				intPurpleY = intYellowY - 100;
+			}
+		}
+		//yellow gray
+		if(grayratrect.intersects(yellowratrect)){
+			if(intGrayY < intYellowY){
+				intGrayY = intYellowY - 100;
+			}else if(intGrayY > intYellowY){
+				intYellowY = intGrayY - 100;
+			}else{
+				intGrayY = intYellowY - 100;
+			}
+		}
+		
+		//yellow green
+		if(greenratrect.intersects(yellowratrect)){
+			if(intGreenY < intYellowY){
+				intGreenY = intYellowY - 100;
+			}else if(intGreenY > intYellowY){
+				intYellowY = intGreenY - 100;
+			}else{
+				intGreenY = intYellowY - 100;
+			}
+		}
+		
+		//gray green
+		if(greenratrect.intersects(grayratrect)){
+			if(intGreenY < intGrayY){
+				intGreenY = intGrayY - 100;
+			}else if(intGreenY > intGrayY){
+				intGrayY = intGreenY - 100;
+			}else{
+				intGreenY = intGrayY - 100;
+			}
+		}
+		
 		// Boarders
 		// general floor
 		if(intGrayY > 520) {

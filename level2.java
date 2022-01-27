@@ -52,13 +52,17 @@ public class level2 extends JPanel implements ActionListener{
 	boolean blnJumpYellow = false;
 	boolean blnJumpPurple = false;
 	Rectangle theground = new Rectangle(0, 620, 1280, 100);
-	/// if player touches lazer, reset player position
+	// if player touches lazer, reset player position
 	
 	Rectangle theplatform = new Rectangle();
 	// lazers
 	Rectangle lazerhor = new Rectangle(intHorLazer, 520, 720, 90);
 	Rectangle lazervert1 = new Rectangle(843, 27, 90, intVertLazer1);
 	Rectangle lazervert2 = new Rectangle(1002, 27, 90, intVertLazer2);
+	
+	//win condition variable
+	boolean blnWin = false;
+	
 	// methods
 	public void actionPerformed(ActionEvent evt){
 		/// repaint
@@ -71,10 +75,7 @@ public class level2 extends JPanel implements ActionListener{
 	
 	public void paintComponent(Graphics g){
 		g.drawImage(background, 0, 0, null);
-		
-		
-		
-		
+	
 		
 		// rats
 		Rectangle grayratrect = new Rectangle(intGrayX, intGrayY, 100, 100);
@@ -308,6 +309,77 @@ public class level2 extends JPanel implements ActionListener{
 			intYellowDefY = -10;
 		}else if(blnJumpYellow == false && intYellowY != 520){
 			intYellowDefY = 10;
+		}
+		
+		//stacking characters
+		
+		//purple gray 
+		if(purpleratrect.intersects(grayratrect)){
+			if(intPurpleY < intGrayY){
+				intPurpleY = intGrayY - 100;
+			}else if(intPurpleY > intGrayY){
+				intGrayY = intPurpleY - 100;
+			}else{
+				intGrayY = intPurpleY - 100;
+			}
+		}
+		//purple green
+		if(purpleratrect.intersects(greenratrect)){
+			if(intPurpleY < intGreenY){
+				intPurpleY = intGreenY - 100;
+			}else if(intPurpleY > intGreenY){
+				intGreenY = intPurpleY - 100;
+			}else{
+				intGreenY = intPurpleY - 100;
+			}
+		}
+		//purple yellow
+		if(purpleratrect.intersects(yellowratrect)){
+			if(intPurpleY < intYellowY){
+				intPurpleY = intYellowY - 100;
+			}else if(intPurpleY > intYellowY){
+				intYellowY = intPurpleY - 100;
+			}else{
+				intPurpleY = intYellowY - 100;
+			}
+		}
+		//yellow gray
+		if(grayratrect.intersects(yellowratrect)){
+			if(intGrayY < intYellowY){
+				intGrayY = intYellowY - 100;
+			}else if(intGrayY > intYellowY){
+				intYellowY = intGrayY - 100;
+			}else{
+				intGrayY = intYellowY - 100;
+			}
+		}
+		
+		//yellow green
+		if(greenratrect.intersects(yellowratrect)){
+			if(intGreenY < intYellowY){
+				intGreenY = intYellowY - 100;
+			}else if(intGreenY > intYellowY){
+				intYellowY = intGreenY - 100;
+			}else{
+				intGreenY = intYellowY - 100;
+			}
+		}
+		
+		//gray green
+		if(greenratrect.intersects(grayratrect)){
+			if(intGreenY < intGrayY){
+				intGreenY = intGrayY - 100;
+			}else if(intGreenY > intGrayY){
+				intGrayY = intGreenY - 100;
+			}else{
+				intGreenY = intGrayY - 100;
+			}
+		}
+		
+		
+		//win condition
+		if(intPurpleX > 1200 && intPurpleY < 500){
+			blnWin = true;
 		}
 	}
 	// contructor

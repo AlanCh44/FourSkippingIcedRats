@@ -33,12 +33,15 @@ public class level1 extends JPanel implements ActionListener{
 	int intGreenDefY = 0;
 	int intPurpleDefX = 0;
 	int intPurpleDefY = 0;
+	//jumping booleans
 	boolean blnJumpGreen = false;
 	boolean blnJumpGray = false;
 	boolean blnJumpYellow = false;
 	boolean blnJumpPurple = false;
+	//win condition boolean
+	boolean blnWin = false;
 	
-	Rectangle theplatform = new Rectangle();
+	
 	Rectangle yellowplat = new Rectangle();
 	
 	//methods
@@ -63,8 +66,6 @@ public class level1 extends JPanel implements ActionListener{
 		Rectangle yellowratrect = new Rectangle(intYellowX, intYellowY, 100, 100);
 		Rectangle purpleratrect = new Rectangle(intPurpleX, intPurpleY, 100, 100);
 		Rectangle greenratrect = new Rectangle(intGreenX, intGreenY, 100, 100);
-		
-	
 		
 		//character deflections
 		intGrayX = intGrayX + intGrayDefX;
@@ -231,6 +232,11 @@ public class level1 extends JPanel implements ActionListener{
 			if(intGreenY > 40){
 				intGreenY = 40;
 			}
+		}
+		
+		//win condition
+		if(intGreenX > 1180 && intGreenY <= 40){
+			blnWin = true;
 		}		
 	}
 	

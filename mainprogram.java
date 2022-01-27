@@ -55,18 +55,29 @@ public class mainprogram implements KeyListener, ActionListener{
 	int intPlayer;
 	
 	// methods
-		public void actionPerformed(ActionEvent evt){
-		//network component
+	public void actionPerformed(ActionEvent evt){
+	//network component (if messages are received)
 		if(evt.getSource() == ssm){
 			/// Split
 			String strLine = ssm.readText();
 			strLineSplit = strLine.split(",");
-			
 			if(strLineSplit[0].equals("Connect")){
 				if(blnHost == true){
 					characters character = new characters(1);
 					strMyColor = character.assigncolor();
 					System.out.println("Color"+strMyColor);
+					// FileIO (player name and color sent to txt file
+                    try {
+                        PrintWriter assign = new PrintWriter(new FileWriter("UserColor.txt", true));
+                        if(intPlayerCount == 1){
+							assign.println(strUser+" = gray");
+							assign.close();
+						}
+                        
+                    } catch (IOException e) {
+                        System.out.println("Error");
+                    }
+                
 					intPlayerCount = intPlayerCount + 1;
 					System.out.println("Players Count: "+intPlayerCount);
 					String strPlayer = strLineSplit[1]+","+intPlayerCount;
@@ -75,13 +86,29 @@ public class mainprogram implements KeyListener, ActionListener{
 						readybut.setEnabled(true);
 					}
 				}
+			//player gets assigned a colour
 			}else if(strLineSplit[0].equals("Number")){
 				if(strUser.equals(strLineSplit[1])){
 					intMyNumber = Integer.parseInt(strLineSplit[2]);
 					characters character = new characters(intMyNumber);
 					strMyColor = character.assigncolor();
 					System.out.println("Color"+strMyColor);
+					//player name and color are sent to txt file
+					try{
+                        PrintWriter assign = new PrintWriter(new FileWriter("UserColor.txt", true));
+						if(intMyNumber == 2 && blnHost == false){
+							assign.println(strUser+" = purple");
+						}else if(intMyNumber == 3 && blnHost == false){
+							assign.println(strUser+" = green");
+						}else if(intMyNumber == 4 && blnHost == false){
+							assign.println(strUser+" = yellow");
+						}
+                       assign.close();
+                    }catch (IOException e) {
+                        System.out.println("Error");
+                    }
 				}
+			//sends message to switch panels for all characters
 			}else if(strLineSplit[0].equals("level")){
 				System.out.println("Switching levels");
 				if(strLineSplit[1].equals("level1")){
@@ -100,7 +127,8 @@ public class mainprogram implements KeyListener, ActionListener{
 					theframe.pack();
 					theframe.requestFocus();
 				}
-				
+			
+			//receives location of each character
 			}else if(strLineSplit[0].equals("location")){
 				if(strCurrentPanel.equals("level1")){
 					if(strLineSplit[1].equals("gray")){
@@ -147,6 +175,8 @@ public class mainprogram implements KeyListener, ActionListener{
 				}
 			}
 		}
+		
+		//player sends message of their location
 		if(evt.getSource() == thetimer){
 			if(strCurrentPanel.equals("level1")){
 				if(strMyColor.equals("gray")){
@@ -158,6 +188,13 @@ public class mainprogram implements KeyListener, ActionListener{
 				}else if(strMyColor.equals("green")){
 					ssm.sendText("location,"+strMyColor+","+level1panel.intGreenX+","+level1panel.intGreenY);
 				}
+				//checks if team has won
+				if(level1panel.blnWin == true){
+					strCurrentPanel = "level2";
+					theframe.setContentPane(level2panel);
+					theframe.pack();
+					theframe.requestFocus();
+				}
 			}else if(strCurrentPanel.equals("level2")){
 				if(strMyColor.equals("gray")){
 					ssm.sendText("location,"+strMyColor+","+level2panel.intGrayX+","+level2panel.intGrayY);
@@ -167,6 +204,13 @@ public class mainprogram implements KeyListener, ActionListener{
 					ssm.sendText("location,"+strMyColor+","+level2panel.intPurpleX+","+level2panel.intPurpleY);
 				}else if(strMyColor.equals("green")){
 					ssm.sendText("location,"+strMyColor+","+level2panel.intGreenX+","+level2panel.intGreenY);
+				}
+				//checks if team has won
+				if(level2panel.blnWin == true){
+					strCurrentPanel = "level3";
+					theframe.setContentPane(level3panel);
+					theframe.pack();
+					theframe.requestFocus();
 				}
 			}else if(strCurrentPanel.equals("level3")){
 				if(strMyColor.equals("gray")){
@@ -178,16 +222,27 @@ public class mainprogram implements KeyListener, ActionListener{
 				}else if(strMyColor.equals("green")){
 					ssm.sendText("location,"+strMyColor+","+level3panel.intGreenX+","+level3panel.intGreenY);
 				}
+				if(level3panel.blnWin == true){
+					if(blnHost == true){
+						theframe.setContentPane(mainmenu2);
+						theframe.pack();
+						theframe.requestFocus();
+					}else if(blnHost == false){
+						theframe.setContentPane(mainmenu1);
+						theframe.pack();
+						theframe.requestFocus();
+					}
+				}
 			}
 		}
 		
-		/// Username
+		// Username input
 		if(evt.getSource() == usernameinput){
 			strUser = usernameinput.getText();
 			usernameinput.setEnabled(false);
 			clientbut.setEnabled(true);
 			serverbut.setEnabled(true);
-		/// Server
+		// Server input
 		}else if(evt.getSource() == serverbut){
 			ssm = new SuperSocketMaster(2188, this);
 			IPinput.setText(ssm.getMyAddress());
@@ -195,7 +250,7 @@ public class mainprogram implements KeyListener, ActionListener{
 			blnHost = true;
 			serverbut.setEnabled(false);
 			clientbut.setEnabled(false);
-		/// Client
+		// Client input
 		}else if(evt.getSource() == clientbut){
 			serverbut.setEnabled(false);
 			clientbut.setEnabled(false);
@@ -244,6 +299,7 @@ public class mainprogram implements KeyListener, ActionListener{
 			theframe.pack();
 			theframe.requestFocus();
 		}
+		//selecting helps bring player to levelselect screen
 		else if(evt.getSource() == levelselectbut){
 			theframe.setContentPane(levelselectscreen);
 			theframe.pack();
@@ -251,6 +307,7 @@ public class mainprogram implements KeyListener, ActionListener{
 			theframe.add(level1but);
 			theframe.add(level2but);
 			theframe.add(level3but);
+		//selecting brings player to first level
 		}else if(evt.getSource() == level1but){
 			strCurrentPanel = "level1";
 			theframe.setContentPane(level1panel);
@@ -259,6 +316,7 @@ public class mainprogram implements KeyListener, ActionListener{
 			if(blnHost == true){
 				ssm.sendText("level,"+strCurrentPanel);
 			}
+		//selecting brings player to second level
 		}else if(evt.getSource() == level2but){
 			strCurrentPanel = "level2";
 			theframe.setContentPane(level2panel);
@@ -267,6 +325,7 @@ public class mainprogram implements KeyListener, ActionListener{
 			if(blnHost == true){
 				ssm.sendText("level,"+strCurrentPanel);
 			}
+		//selecting brings player to third level
 		}else if (evt.getSource() == level3but) {
 			strCurrentPanel = "level3";
 			theframe.setContentPane(level3panel);
@@ -278,14 +337,17 @@ public class mainprogram implements KeyListener, ActionListener{
 		}
 	}
 	
+	//player movement
+
 	public void keyReleased(KeyEvent evt){
+		//prevents movement after releasing key
 		if(evt.getKeyChar() == 'a'){
-			
+			//for help screen
 			if(strCurrentPanel.equals("help")){
 				helpscreen.intGrayDefX = characterobject.stopmoving();
+			//for level 1
 			}else if(strCurrentPanel.equals("level1")){
 				if(strMyColor.equals("gray")){
-					//level1panel.intGrayDefX = characterobject.stopmoving();
 					level1panel.intGrayDefX = characterobject.stopmoving();
 				}else if(strMyColor.equals("green")){
 					level1panel.intGreenDefX = characterobject.stopmoving();
@@ -294,6 +356,7 @@ public class mainprogram implements KeyListener, ActionListener{
 				}else if(strMyColor.equals("purple")){
 					level1panel.intPurpleDefX = characterobject.stopmoving();
 				}
+			//for level 2
 			}else if(strCurrentPanel.equals("level2")){
 				if(strMyColor.equals("gray")){
 					level2panel.intGrayDefX = characterobject.stopmoving();
@@ -304,9 +367,9 @@ public class mainprogram implements KeyListener, ActionListener{
 				}else if(strMyColor.equals("purple")){
 					level2panel.intPurpleDefX = characterobject.stopmoving();
 				}
+			//for level 3
 			} else if(strCurrentPanel.equals("level3")){
 				if(strMyColor.equals("gray")){
-					//level1panel.intGrayDefX = characterobject.stopmoving();
 					level3panel.intGrayDefX = characterobject.stopmoving();
 				}else if(strMyColor.equals("green")){
 					level3panel.intGreenDefX = characterobject.stopmoving();
@@ -318,8 +381,10 @@ public class mainprogram implements KeyListener, ActionListener{
 			}
 			
 		}else if(evt.getKeyChar() == 'd'){
+			//help
 			if(strCurrentPanel.equals("help")){
 				helpscreen.intGrayDefX = characterobject.stopmoving();
+			//level 1
 			}else if(strCurrentPanel.equals("level1")){
 				if(strMyColor.equals("gray")){
 					level1panel.intGrayDefX = characterobject.stopmoving();
@@ -330,6 +395,7 @@ public class mainprogram implements KeyListener, ActionListener{
 				}else if(strMyColor.equals("purple")){
 					level1panel.intPurpleDefX = characterobject.stopmoving();
 				}
+			//level 2
 			}else if(strCurrentPanel.equals("level2")){
 				if(strMyColor.equals("gray")){
 					level2panel.intGrayDefX = characterobject.stopmoving();
@@ -340,6 +406,7 @@ public class mainprogram implements KeyListener, ActionListener{
 				}else if(strMyColor.equals("purple")){
 					level2panel.intPurpleDefX = characterobject.stopmoving();
 				}
+			//level 3
 			}else if(strCurrentPanel.equals("level3")){
 				if(strMyColor.equals("gray")){
 					level3panel.intGrayDefX = characterobject.stopmoving();
@@ -354,9 +421,12 @@ public class mainprogram implements KeyListener, ActionListener{
 		}
 	}
 	public void keyPressed(KeyEvent evt){
+		//allows characters to move
 		if(evt.getKeyChar() == 'a'){
+			//help
 			if(strCurrentPanel.equals("help")){
 				helpscreen.intGrayDefX = characterobject.moveleft();
+			//level 1
 			}else if(strCurrentPanel.equals("level1")){
 				if(strMyColor.equals("gray")){
 					level1panel.intGrayDefX = characterobject.moveleft();
@@ -368,6 +438,7 @@ public class mainprogram implements KeyListener, ActionListener{
 					System.out.println("moving");
 					level1panel.intPurpleDefX = characterobject.moveleft();
 				}
+			//level 2
 			}else if(strCurrentPanel.equals("level2")){
 				if(strMyColor.equals("gray")){
 					level2panel.intGrayDefX = characterobject.moveleft();
@@ -378,6 +449,7 @@ public class mainprogram implements KeyListener, ActionListener{
 				}else if(strMyColor.equals("purple")){
 					level2panel.intPurpleDefX = characterobject.moveleft();
 				}
+			//level 3
 			}else if(strCurrentPanel.equals("level3")){
 				if(strMyColor.equals("gray")){
 					level3panel.intGrayDefX = characterobject.moveleft();
@@ -390,9 +462,12 @@ public class mainprogram implements KeyListener, ActionListener{
 					level3panel.intPurpleDefX = characterobject.moveleft();
 				}
 			}
+		
 		}else if(evt.getKeyChar() == 'd'){
+			//help
 			if(strCurrentPanel.equals("help")){
 				helpscreen.intGrayDefX = characterobject.moveright();
+			//level 1
 			}else if(strCurrentPanel.equals("level1")){
 				if(strMyColor.equals("gray")){
 					level1panel.intGrayDefX = characterobject.moveright();
@@ -404,6 +479,7 @@ public class mainprogram implements KeyListener, ActionListener{
 					System.out.println("moving");
 					level1panel.intPurpleDefX = characterobject.moveright();
 				}
+			//level 2
 			}else if(strCurrentPanel.equals("level2")){
 				if(strMyColor.equals("gray")){
 					level2panel.intGrayDefX = characterobject.moveright();
@@ -414,6 +490,7 @@ public class mainprogram implements KeyListener, ActionListener{
 				}else if(strMyColor.equals("purple")){
 					level2panel.intPurpleDefX = characterobject.moveright();
 				}
+			//level 3
 			}else if(strCurrentPanel.equals("level3")){
 				if(strMyColor.equals("gray")){
 					level3panel.intGrayDefX = characterobject.moveright();
@@ -426,9 +503,11 @@ public class mainprogram implements KeyListener, ActionListener{
 					level3panel.intPurpleDefX = characterobject.moveright();
 				}
 			}
+		//jumping 
 		}else if(evt.getKeyChar() == 'w'){
 			if(strCurrentPanel.equals("help")){
 				helpscreen.blnJump = true;
+				//starts thread which prevents character floating
 				new Thread(new thread()).start();
 			}else if(strCurrentPanel.equals("level1")){
 				if(strMyColor.equals("gray")){
