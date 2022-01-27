@@ -33,7 +33,6 @@ public class level1 extends JPanel implements ActionListener{
 	int intGreenDefY = 0;
 	int intPurpleDefX = 0;
 	int intPurpleDefY = 0;
-	int intplatY = 585;
 	boolean blnJumpGreen = false;
 	boolean blnJumpGray = false;
 	boolean blnJumpYellow = false;
@@ -46,20 +45,12 @@ public class level1 extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent evt){
 		if(evt.getSource() == thetimer){
 			this.repaint();
-			/*
-			System.out.println("X: "+intGrayX);
-			System.out.println("Y: "+intGrayY);
-			System.out.println("jump: "+blnJumpGray);
-			*/
+	
 		}
 	}
 	
 	public void paintComponent(Graphics g){
 		//rectangle object for each player (used to keep track of each players location and interactions
-		Rectangle grayratrect = new Rectangle(intGrayX, intGrayY, 100, 100);
-		Rectangle yellowratrect = new Rectangle(intYellowX, intYellowY, 100, 100);
-		Rectangle purpleratrect = new Rectangle(intYellowX, intYellowY, 100, 100);
-		Rectangle greenratrect = new Rectangle(intYellowX, intYellowY, 100, 100);
 		
 		//character image and platform drawings
 		g.drawImage(background, 0, 0, null);
@@ -67,10 +58,13 @@ public class level1 extends JPanel implements ActionListener{
 		g.drawImage(greenrat, intGreenX, intGreenY, null);
 		g.drawImage(purplerat, intPurpleX, intPurpleY, null);
 		g.drawImage(yellowrat, intYellowX, intYellowY, null);
-		//drawplatform
-		g.setColor(new Color(230, 145, 56));
-		g.fillRect(200, intplatY, 270, 35);
-		theplatform = new Rectangle(200, intplatY, 270, 35);
+		
+		Rectangle grayratrect = new Rectangle(intGrayX, intGrayY, 100, 100);
+		Rectangle yellowratrect = new Rectangle(intYellowX, intYellowY, 100, 100);
+		Rectangle purpleratrect = new Rectangle(intPurpleX, intPurpleY, 100, 100);
+		Rectangle greenratrect = new Rectangle(intGreenX, intGreenY, 100, 100);
+		
+	
 		
 		//character deflections
 		intGrayX = intGrayX + intGrayDefX;
@@ -81,6 +75,70 @@ public class level1 extends JPanel implements ActionListener{
 		intPurpleY = intPurpleY + intPurpleDefY;
 		intYellowX = intYellowX + intYellowDefX;
 		intYellowY = intYellowY + intYellowDefY;
+		
+		//stacking
+		//purple gray 
+		if(purpleratrect.intersects(grayratrect)){
+			if(intPurpleY < intGrayY){
+				intPurpleY = intGrayY - 100;
+			}else if(intPurpleY > intGrayY){
+				intGrayY = intPurpleY - 100;
+			}else{
+				intGrayY = intPurpleY - 100;
+			}
+		}
+		//purple green
+		if(purpleratrect.intersects(greenratrect)){
+			if(intPurpleY < intGreenY){
+				intPurpleY = intGreenY - 100;
+			}else if(intPurpleY > intGreenY){
+				intGreenY = intPurpleY - 100;
+			}else{
+				intGreenY = intPurpleY - 100;
+			}
+		}
+		//purple yellow
+		if(purpleratrect.intersects(yellowratrect)){
+			if(intPurpleY < intYellowY){
+				intPurpleY = intYellowY - 100;
+			}else if(intPurpleY > intYellowY){
+				intYellowY = intPurpleY - 100;
+			}else{
+				intPurpleY = intYellowY - 100;
+			}
+		}
+		//yellow gray
+		if(grayratrect.intersects(yellowratrect)){
+			if(intGrayY < intYellowY){
+				intGrayY = intYellowY - 100;
+			}else if(intGrayY > intYellowY){
+				intYellowY = intGrayY - 100;
+			}else{
+				intGrayY = intYellowY - 100;
+			}
+		}
+		
+		//yellow green
+		if(greenratrect.intersects(yellowratrect)){
+			if(intGreenY < intYellowY){
+				intGreenY = intYellowY - 100;
+			}else if(intGreenY > intYellowY){
+				intYellowY = intGreenY - 100;
+			}else{
+				intGreenY = intYellowY - 100;
+			}
+		}
+		
+		//gray green
+		if(greenratrect.intersects(grayratrect)){
+			if(intGreenY < intGrayY){
+				intGreenY = intGrayY - 100;
+			}else if(intGreenY > intGrayY){
+				intGrayY = intGreenY - 100;
+			}else{
+				intGreenY = intGrayY - 100;
+			}
+		}
 		
 		//general floor
 		if(intGrayY > 520){
@@ -125,45 +183,26 @@ public class level1 extends JPanel implements ActionListener{
 			intYellowDefY = 10;
 		}
 		
-		//moving platform
-		if((intGrayX > 138 && intGrayX < 450 && intGrayY < intplatY) && (intGreenX > 138 && intGreenX < 450 && intGreenY < intplatY)&&(intPurpleX > 138 && intPurpleX < 450 && intPurpleY < intplatY)&&(intYellowX > 138 && intYellowX < 450 && intYellowY < intplatY)){
-			intGrayY = intplatY - 100;
-			intGreenY = intplatY - 100;
-			intPurpleY = intplatY - 100;
-			intYellowY = intplatY - 100;
-			intplatY = intplatY - 5;
+		//moving platform/air
 		
-		//change else if statement later so that the platform will move back down if a single character isnt above it
-		}else{
-			intplatY = intplatY + 5;
-			if(intplatY > 585){
-				intplatY = 585;
-			}
+		if(intGrayX > 138 && intGrayX < 450){
+			intGrayY = 310;
 		}
 		
-		//moving platform boundary
-		if(intplatY <= 405){
-			intplatY = 405;
+		if(intGreenX > 138 && intGreenX < 450){
+			intGreenY = 310;
 		}
+		
+		if(intPurpleX > 138 && intPurpleX < 450){
+			intPurpleY = 310;
+		}
+		
+		if(intYellowX > 138 && intYellowX < 450){
+			intYellowY = 310;
+		}
+		
 		
 		//yellow platform
-		if(intGrayX > 444 && intGrayX < 636 && intGrayY < 350){
-			if(intGrayY > 310){
-				intGrayY = 310;
-			}
-		}
-		
-		if(intGreenX > 444 && intGreenX < 636 && intGreenY < 350){
-			if(intGreenY > 310){
-				intGreenY = 310;
-			}
-		}
-		
-		if(intPurpleX > 444 && intPurpleX < 636 && intPurpleY < 350){
-			if(intPurpleY > 310){
-				intPurpleY = 310;
-			}
-		}
 		
 		if(intYellowX > 444 && intYellowX < 636 && intYellowY < 350){
 			if(intYellowY > 310){
@@ -172,27 +211,10 @@ public class level1 extends JPanel implements ActionListener{
 		}
 		
 		//purple platform
-		if(intGrayX > 615 && intGrayX < 772 && intGrayY < 264){
-			if(intGrayY > 244){
-				intGrayY = 244;
-			}
-		}
-		
-		if(intGreenX > 615 && intGreenX < 772 && intGreenY < 264){
-			if(intGreenY > 244){
-				intGreenY = 244;
-			}
-		}
 		
 		if(intPurpleX > 615 && intPurpleX < 772 && intPurpleY < 264){
 			if(intPurpleY > 244){
 				intPurpleY = 244;
-			}
-		}
-		
-		if(intYellowX > 615 && intYellowX < 772 && intYellowY < 264){
-			if(intYellowY > 244){
-				intYellowY = 244;
 			}
 		}
 		
@@ -203,51 +225,13 @@ public class level1 extends JPanel implements ActionListener{
 			}
 		}
 		
-		if(intGreenX > 753 && intGreenX < 1089 && intGreenY < 226){
-			if(intGreenY > 196){
-				intGreenY = 196;
-			}
-		}
-		
-		if(intYellowX > 753 && intYellowX < 1089 && intYellowY < 226){
-			if(intYellowY > 196){
-				intYellowY = 196;
-			}
-		}
-		
-		if(intPurpleX > 753 && intPurpleX < 1089 && intPurpleY < 226){
-			if(intPurpleY > 196){
-				intPurpleY = 196;
-			}
-		}
-		
-		
 		//green platform
-		if(intGrayX > 1050 && intGrayX < 1280 && intGrayY < 60){
-			if(intGrayY > 40){
-				intGrayY = 40;
-			}
-		}
 		
 		if(intGreenX > 1050 && intGreenX < 1280 && intGreenY < 60){
 			if(intGreenY > 40){
 				intGreenY = 40;
 			}
-		}
-		
-		if(intYellowX > 1050 && intYellowX < 1280 && intYellowY < 60){
-			if(intYellowY > 40){
-				intYellowY = 40;
-			}
-		}
-		
-		if(intPurpleX > 1050 && intPurpleX < 1280 && intPurpleY < 60){
-			if(intPurpleY > 40){
-				intPurpleY = 40;
-			}
-		}
-		
-		
+		}		
 	}
 	
 	
