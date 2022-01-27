@@ -31,7 +31,7 @@ public class mainprogram implements KeyListener, ActionListener{
 	String strCurrentPanel = ""; 
 	characters characterobject = new characters(0);
 	
-	//ssm data (networking)
+	//ssm data and JComponents(networking)
 	JButton serverbut = new JButton("Server Mode");
 	JButton clientbut = new JButton("Client Mode");
 	JTextField IPinput = new JTextField();
@@ -39,11 +39,14 @@ public class mainprogram implements KeyListener, ActionListener{
 	JLabel theusername = new JLabel("Username:");
 	JLabel IPlabel = new JLabel("Server Address:");
 	Font thefont = new Font("Courier New", Font.PLAIN, 125);
+	JTextArea thechat = new JTextArea("");
+	boolean blnChat = false;
 	String strUser;
 	boolean blnHost = true;
 	int intPlayerCount = 1;
 	String strLineSplit[];
 	String strIP;
+	//variable used by host
 	boolean blnReady = false;
 	int intMyNumber;
 	String strMyColor = ""; //keeps track of player color
@@ -53,6 +56,7 @@ public class mainprogram implements KeyListener, ActionListener{
 	
 	SuperSocketMaster ssm;
 	int intPlayer;
+	
 	
 	// methods
 	public void actionPerformed(ActionEvent evt){
@@ -542,6 +546,18 @@ public class mainprogram implements KeyListener, ActionListener{
 					level3panel.blnJumpPurple = true;
 				}
 				new Thread(new thread()).start();
+			}
+		}
+		
+		if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+			if(blnChat == false){
+				System.out.println("ENTER KEY");
+				thechat.setSize(200,200);
+				thechat.setLocation(0,0);
+				thechat.requestFocus();
+			}else if(blnChat == true){
+				thechat.setLocation(-100,-100);
+				theframe.requestFocus();
 			}
 		}
 	}

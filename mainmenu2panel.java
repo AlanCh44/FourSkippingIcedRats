@@ -13,6 +13,7 @@ public class mainmenu2panel extends JPanel implements ActionListener{
 	JButton levelselectbut = new JButton("Level Select");
 	BufferedImage background = null;
 	
+	
 	//methods
 	public void actionPerformed(ActionEvent evt){
 		
