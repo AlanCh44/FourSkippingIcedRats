@@ -14,12 +14,17 @@ public class level2 extends JPanel implements ActionListener{
 	BufferedImage grayrat = null;
 	BufferedImage purplerat = null;
 	BufferedImage greenrat = null;
-	BufferedImage lazerimg = null;
+	BufferedImage lazerhorimg = null;
+	BufferedImage lazervertimg = null;
 	Timer thetimer = new Timer(1000/60, this);
 	BufferedImage background = null;
 	
 	Rectangle thebox = new Rectangle(364, 519, 100, 100);
-
+	int intHorLazer = 485;
+	int intVertLazer1 = 438;
+	int intVertLazer2 = 438;
+	
+	
 	// gray rat position
 	int intGrayX = 0;
 	int intGrayY = 520;
@@ -48,20 +53,26 @@ public class level2 extends JPanel implements ActionListener{
 	boolean blnJumpPurple = false;
 	Rectangle theground = new Rectangle(0, 620, 1280, 100);
 	/// if player touches lazer, reset player position
-	Rectangle lazer = new Rectangle();
-	Rectangle theplatform = new Rectangle();
 	
+	Rectangle theplatform = new Rectangle();
+	// lazers
+	Rectangle lazerhor = new Rectangle(intHorLazer, 520, 720, 90);
+	Rectangle lazervert1 = new Rectangle(843, 27, 90, intVertLazer1);
+	Rectangle lazervert2 = new Rectangle(1002, 27, 90, intVertLazer2);
 	// methods
 	public void actionPerformed(ActionEvent evt){
 		/// repaint
 		if(evt.getSource() == thetimer){
 			this.repaint();
+			
 		}
 		
 	}
 	
 	public void paintComponent(Graphics g){
 		g.drawImage(background, 0, 0, null);
+		
+		
 		
 		
 		
@@ -74,6 +85,66 @@ public class level2 extends JPanel implements ActionListener{
 		g.drawImage(greenrat,intGreenX,intGreenY,null);
 		g.drawImage(yellowrat,intYellowX,intYellowY,null);
 		g.drawImage(purplerat,intPurpleX,intPurpleY,null);
+		
+		// lazer
+		g.drawImage(lazerhorimg, intHorLazer ,520 ,720 , 90, null);
+		g.drawImage(lazervertimg, 843, 27, 90, intVertLazer1, null);
+		g.drawImage(lazervertimg, 1002, 27, 90, intVertLazer2, null);
+		/// horizontal lazer
+		if(grayratrect.intersects(lazerhor)){
+			intHorLazer = intGrayX + 150;
+		}else if(!grayratrect.intersects(lazerhor)){
+			intHorLazer = 485;
+		}
+		if(greenratrect.intersects(lazerhor) && !grayratrect.intersects(lazerhor)){
+			intGreenX = 50;
+			intGreenY = 0;
+		}
+		if(purpleratrect.intersects(lazerhor)  && !grayratrect.intersects(lazerhor)){
+			intPurpleX = 50;
+			intPurpleY = 0;
+		}
+		if(yellowratrect.intersects(lazerhor)  && !grayratrect.intersects(lazerhor)){
+			intYellowX = 50;
+			intYellowY = 0;
+		}
+		/// vert lazer 1
+		if(greenratrect.intersects(lazervert1)){
+			intVertLazer1 = intGreenY - 50;
+		}else if(yellowratrect.intersects(lazervert1)){
+			intVertLazer1 = intYellowY - 50;
+		}else if(!yellowratrect.intersects(lazervert2) && !greenratrect.intersects(lazervert2)){
+			intVertLazer1 = 438;
+		}
+		if(grayratrect.intersects(lazervert1) && !greenratrect.intersects(lazervert1) && !yellowratrect.intersects(lazervert1)){
+			intGrayX = 50;
+			intGrayY = 0;	
+		}
+		if(purpleratrect.intersects(lazervert1) && !greenratrect.intersects(lazervert1) && !yellowratrect.intersects(lazervert1) ){
+			intPurpleX = 50;
+			intPurpleY = 0;	
+		}
+
+		/// vert lazer 2
+		if(yellowratrect.intersects(lazervert2)){
+			intVertLazer2 = intYellowY - 50;
+		}else if(greenratrect.intersects(lazervert2)){
+			intVertLazer2 = intGreenY - 50;
+		}else if(!yellowratrect.intersects(lazervert2) && !greenratrect.intersects(lazervert2)){
+			intVertLazer2 = 438;
+		}
+		if(grayratrect.intersects(lazervert1) && !yellowratrect.intersects(lazervert2) && !greenratrect.intersects(lazervert2)){
+			intGrayX = 50;
+			intGrayY = 0;	
+		}
+		if(purpleratrect.intersects(lazervert1) && !yellowratrect.intersects(lazervert2) && !greenratrect.intersects(lazervert2)){
+			intPurpleX = 50;
+			intPurpleY = 0;	
+		}
+		// shields
+		g.fillRect(intGrayX + 120, intGrayY + 10, 25, 80);
+		g.fillRect(intGreenX + 10, intGreenY - 25, 80, 25);
+		g.fillRect(intYellowX + 10, intYellowY - 25, 80, 25);
 		
 		// boundries
 		// the box
@@ -263,12 +334,12 @@ public class level2 extends JPanel implements ActionListener{
 			System.out.println("Unable to load image file");
 		}
 		try{
-			lazerimg = ImageIO.read(new File("vertlazer.png"));
+			lazervertimg = ImageIO.read(new File("vertlazer.png"));
 		}catch(IOException e){
 			System.out.println("Error file not found");
 		}
 		try{
-			lazerimg = ImageIO.read(new File("horizontallazer.png"));
+			lazerhorimg = ImageIO.read(new File("horizontallazer.png"));
 		}catch(IOException e){
 			System.out.println("Error file not found");
 		}
