@@ -6,9 +6,8 @@ import java.awt.image.BufferedImage;
 import java.awt.event.*;
 import javax.swing.event.*;
 
-// Need to add stacking
-// Lose = reset position?
-// Win = ????
+// Need to be able to stack ontop of each other
+// Need to add functions for winning and buttons (losing)
 public class buttonpanel extends JPanel implements ActionListener {
 	// Properties
 	BufferedImage yellowrat = null;
@@ -87,75 +86,18 @@ public class buttonpanel extends JPanel implements ActionListener {
 		// Buttons / Lose
 		if(grayratrect.intersects(button) || purpleratrect.intersects(button) || yellowratrect.intersects(button) || greenratrect.intersects(button)) {
 			g.drawImage(buttonpressedimg, intButtonX, intButtonY, null);
-			intGrayX = 0;
-			intGrayY = 520;
-			intGrayDefX = 0;
-			intGrayDefY = 0;
-			// Yellow Rat
-			intYellowX = 50;
-			intYellowY = 520;
-			intYellowDefX = 0;
-			intYellowDefY = 0;
-			// Purple Rat
-			intPurpleX = 100;
-			intPurpleY = 520;
-			intPurpleDefX = 0;
-			intPurpleDefY = 0;
-			// Green Rat
-			intGreenX = 150;
-			intGreenY = 520;
-			intGreenDefX = 0;
-			intGreenDefY = 0;
 			System.out.println("lost!");
 		} else {
 			g.drawImage(buttonimg, intButtonX, intButtonY, null);
 		}
 		if (grayratrect.intersects(button2) || purpleratrect.intersects(button2) || yellowratrect.intersects(button2) || greenratrect.intersects(button2)) {
 			g.drawImage(buttonpressedimg, intButton2X, intButtonY, null);
-			intGrayX = 0;
-			intGrayY = 520;
-			intGrayDefX = 0;
-			intGrayDefY = 0;
-			// Yellow Rat
-			intYellowX = 50;
-			intYellowY = 520;
-			intYellowDefX = 0;
-			intYellowDefY = 0;
-			// Purple Rat
-			intPurpleX = 100;
-			intPurpleY = 520;
-			intPurpleDefX = 0;
-			intPurpleDefY = 0;
-			// Green Rat
-			intGreenX = 150;
-			intGreenY = 520;
-			intGreenDefX = 0;
-			intGreenDefY = 0;
 			System.out.println("lost!");
 		} else {
 			g.drawImage(buttonimg, intButton2X, intButtonY, null);
 		}
 		if (grayratrect.intersects(button3) || purpleratrect.intersects(button3) || yellowratrect.intersects(button3) || greenratrect.intersects(button3)) {
 			g.drawImage(buttonpressedimg, intButton3X, intButtonY, null);
-			intGrayX = 0;
-			intGrayY = 520;
-			intGrayDefX = 0;
-			intGrayDefY = 0;
-			// Yellow Rat
-			intYellowX = 50;
-			intYellowY = 520;
-			intYellowDefX = 0;
-			intYellowDefY = 0;
-			// Purple Rat
-			intPurpleX = 100;
-			intPurpleY = 520;
-			intPurpleDefX = 0;
-			intPurpleDefY = 0;
-			// Green Rat
-			intGreenX = 150;
-			intGreenY = 520;
-			intGreenDefX = 0;
-			intGreenDefY = 0;
 			System.out.println("lost!");
 		} else {
 			g.drawImage(buttonimg, intButton3X, intButtonY, null);
@@ -189,7 +131,7 @@ public class buttonpanel extends JPanel implements ActionListener {
 		// Stacking
 
 		// Boarders
-		// general floor
+		//general floor
 		if(intGrayY > 520) {
 			intGrayY = 520;
 			intGrayDefY = 0;
