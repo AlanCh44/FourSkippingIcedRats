@@ -5,6 +5,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.awt.event.*;
 import javax.swing.event.*;
+
 public class mainprogram implements KeyListener, ActionListener{
 	// properties
 	JFrame theframe = new JFrame("Four Skipping Iced Rats");
@@ -13,6 +14,7 @@ public class mainprogram implements KeyListener, ActionListener{
 	mainmenu1panel mainmenu1 = new mainmenu1panel();
 	mainmenu2panel mainmenu2 = new mainmenu2panel();
 	level1 level1panel = new level1();
+	buttonpanel level3panel = new buttonpanel();
 	losescreenpanel losescreen = new losescreenpanel();
 	animationpanel helpscreen = new animationpanel();
 	levelselect levelselectscreen = new levelselect();
@@ -87,6 +89,11 @@ public class mainprogram implements KeyListener, ActionListener{
 					theframe.setContentPane(level1panel);
 					theframe.pack();
 					theframe.requestFocus();
+				} else if (strLineSplit[1].equals("level3")) {
+					strCurrentPanel = "level3";
+					theframe.setContentPane(level3panel);
+					theframe.pack();
+					theframe.requestFocus();
 				}
 				
 			}else if(strLineSplit[0].equals("location")){
@@ -104,6 +111,20 @@ public class mainprogram implements KeyListener, ActionListener{
 						level1panel.intPurpleX = Integer.parseInt(strLineSplit[2]);
 						level1panel.intPurpleY = Integer.parseInt(strLineSplit[3]);
 					}
+				} else if (strCurrentPanel.equals("level3")){
+					if(strLineSplit[1].equals("gray")){
+						level3panel.intGrayX = Integer.parseInt(strLineSplit[2]);
+						level3panel.intGrayY = Integer.parseInt(strLineSplit[3]);
+					}else if(strLineSplit[1].equals("green")){
+						level3panel.intGreenX = Integer.parseInt(strLineSplit[2]);
+						level3panel.intGreenY = Integer.parseInt(strLineSplit[3]);
+					}else if(strLineSplit[1].equals("yellow")){
+						level3panel.intYellowX = Integer.parseInt(strLineSplit[2]);
+						level3panel.intYellowY = Integer.parseInt(strLineSplit[3]);
+					}else if(strLineSplit[1].equals("purple")){
+						level3panel.intPurpleX = Integer.parseInt(strLineSplit[2]);
+						level3panel.intPurpleY = Integer.parseInt(strLineSplit[3]);
+					}
 				}
 			}
 		}
@@ -118,7 +139,17 @@ public class mainprogram implements KeyListener, ActionListener{
 				}else if(strMyColor.equals("green")){
 					ssm.sendText("location,"+strMyColor+","+level1panel.intGreenX+","+level1panel.intGreenY);
 				}
-			}	
+			} else if(strCurrentPanel.equals("level3")){
+				if(strMyColor.equals("gray")){
+					ssm.sendText("location,"+strMyColor+","+level3panel.intGrayX+","+level3panel.intGrayY);
+				}else if(strMyColor.equals("yellow")){
+					ssm.sendText("location,"+strMyColor+","+level3panel.intYellowX+","+level3panel.intYellowY);
+				}else if(strMyColor.equals("purple")){
+					ssm.sendText("location,"+strMyColor+","+level3panel.intPurpleX+","+level3panel.intPurpleY);
+				}else if(strMyColor.equals("green")){
+					ssm.sendText("location,"+strMyColor+","+level3panel.intGreenX+","+level3panel.intGreenY);
+				}
+			}
 		}
 		
 		/// Username
@@ -201,6 +232,14 @@ public class mainprogram implements KeyListener, ActionListener{
 			if(blnHost == true){
 				ssm.sendText("level,"+strCurrentPanel);
 			}
+		} else if (evt.getSource() == level3but) {
+			strCurrentPanel = "level3";
+			theframe.setContentPane(level3panel);
+			theframe.pack();
+			theframe.requestFocus();
+			if(blnHost == true){
+				ssm.sendText("level,"+strCurrentPanel);
+			}
 		}
 	}
 	
@@ -220,6 +259,17 @@ public class mainprogram implements KeyListener, ActionListener{
 				}else if(strMyColor.equals("purple")){
 					level1panel.intPurpleDefX = characterobject.stopmoving();
 				}
+			} else if(strCurrentPanel.equals("level3")){
+				if(strMyColor.equals("gray")){
+					//level1panel.intGrayDefX = characterobject.stopmoving();
+					level3panel.intGrayDefX = characterobject.stopmoving();
+				}else if(strMyColor.equals("green")){
+					level3panel.intGreenDefX = characterobject.stopmoving();
+				}else if(strMyColor.equals("yellow")){
+					level3panel.intYellowDefX = characterobject.stopmoving();
+				}else if(strMyColor.equals("purple")){
+					level3panel.intPurpleDefX = characterobject.stopmoving();
+				}
 			}
 			
 		}else if(evt.getKeyChar() == 'd'){
@@ -234,6 +284,16 @@ public class mainprogram implements KeyListener, ActionListener{
 					level1panel.intYellowDefX = characterobject.stopmoving();
 				}else if(strMyColor.equals("purple")){
 					level1panel.intPurpleDefX = characterobject.stopmoving();
+				}
+			} else if(strCurrentPanel.equals("level3")){
+				if(strMyColor.equals("gray")){
+					level3panel.intGrayDefX = characterobject.stopmoving();
+				}else if(strMyColor.equals("green")){
+					level3panel.intGreenDefX = characterobject.stopmoving();
+				}else if(strMyColor.equals("yellow")){
+					level3panel.intYellowDefX = characterobject.stopmoving();
+				}else if(strMyColor.equals("purple")){
+					level3panel.intPurpleDefX = characterobject.stopmoving();
 				}
 			}
 			
@@ -254,6 +314,17 @@ public class mainprogram implements KeyListener, ActionListener{
 					System.out.println("moving");
 					level1panel.intPurpleDefX = characterobject.moveleft();
 				}
+			} else if(strCurrentPanel.equals("level3")){
+				if(strMyColor.equals("gray")){
+					level3panel.intGrayDefX = characterobject.moveleft();
+				}else if(strMyColor.equals("green")){
+					level3panel.intGreenDefX = characterobject.moveleft();
+				}else if(strMyColor.equals("yellow")){
+					level3panel.intYellowDefX = characterobject.moveleft();
+				}else if(strMyColor.equals("purple")){
+					System.out.println("moving");
+					level3panel.intPurpleDefX = characterobject.moveleft();
+				}
 			}
 		}else if(evt.getKeyChar() == 'd'){
 			if(strCurrentPanel.equals("help")){
@@ -269,6 +340,17 @@ public class mainprogram implements KeyListener, ActionListener{
 					System.out.println("moving");
 					level1panel.intPurpleDefX = characterobject.moveright();
 				}
+			} else if(strCurrentPanel.equals("level3")){
+				if(strMyColor.equals("gray")){
+					level3panel.intGrayDefX = characterobject.moveright();
+				}else if(strMyColor.equals("green")){
+					level3panel.intGreenDefX = characterobject.moveright();
+				}else if(strMyColor.equals("yellow")){
+					level3panel.intYellowDefX = characterobject.moveright();
+				}else if(strMyColor.equals("purple")){
+					System.out.println("moving");
+					level3panel.intPurpleDefX = characterobject.moveright();
+				}
 			}
 		}else if(evt.getKeyChar() == 'w'){
 			if(strCurrentPanel.equals("help")){
@@ -283,6 +365,17 @@ public class mainprogram implements KeyListener, ActionListener{
 					level1panel.blnJumpYellow = true;
 				}else if(strMyColor.equals("purple")){
 					level1panel.blnJumpPurple = true;
+				}
+				new Thread(new thread()).start();
+			} else if(strCurrentPanel.equals("level3")){
+				if(strMyColor.equals("gray")){
+					level3panel.blnJumpGray = true;	
+				}else if(strMyColor.equals("green")){
+					level3panel.blnJumpGreen = true;
+				}else if(strMyColor.equals("yellow")){
+					level3panel.blnJumpYellow = true;
+				}else if(strMyColor.equals("purple")){
+					level3panel.blnJumpPurple = true;
 				}
 				new Thread(new thread()).start();
 			}
@@ -314,6 +407,16 @@ public class mainprogram implements KeyListener, ActionListener{
 						level1panel.blnJumpYellow = false;
 					}else if(strMyColor.equals("green")){
 						level1panel.blnJumpGreen = false;
+					}
+				} else if(strCurrentPanel.equals("level3")){
+					if(strMyColor.equals("gray")){
+						level3panel.blnJumpGray = false;
+					}else if(strMyColor.equals("purple")){
+						level3panel.blnJumpPurple = false;
+					}else if(strMyColor.equals("yellow")){
+						level3panel.blnJumpYellow = false;
+					}else if(strMyColor.equals("green")){
+						level3panel.blnJumpGreen = false;
 					}
 				}
 				
@@ -431,4 +534,3 @@ public class mainprogram implements KeyListener, ActionListener{
 	}
 
 }
-
