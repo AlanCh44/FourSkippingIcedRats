@@ -115,7 +115,7 @@ public class level1 extends JPanel implements ActionListener{
 		
 		if(blnJumpPurple == true){
 			intPurpleDefY = -10;
-		}else if(blnJumpGreen == false){
+		}else if(blnJumpPurple == false){
 			intPurpleDefY = 10;
 		}
 		
