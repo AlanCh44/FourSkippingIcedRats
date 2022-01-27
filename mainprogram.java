@@ -7,9 +7,19 @@ import java.awt.event.*;
 import javax.swing.event.*;
 public class mainprogram implements KeyListener, ActionListener{
 	// properties
+	/** JFrame 
+	* creates JFrame for game <br>
+	*/
 	JFrame theframe = new JFrame("Four Skipping Iced Rats");
+	/**  Timer 
+	* Creates timer for actions <br>
+	* runs at 60 fps <br>
+	*/
 	Timer thetimer = new Timer(1000/60, this);
 	// panels
+	/**  Panels 
+	* Creates panels for levels and menus <br>
+	*/
 	mainmenu1panel mainmenu1 = new mainmenu1panel();
 	mainmenu2panel mainmenu2 = new mainmenu2panel();
 	level1 level1panel = new level1();
@@ -20,6 +30,9 @@ public class mainprogram implements KeyListener, ActionListener{
 	levelselect levelselectscreen = new levelselect();
 	
 	//panel buttons
+	/**  Panel Buttons 
+	* Creates buttons for main menus <br>
+	*/
 	JButton readybut = new JButton("Ready");
 	JButton thehelpscreenbut = new JButton("Help");
 	JButton playgame = new JButton("Play");
@@ -27,11 +40,15 @@ public class mainprogram implements KeyListener, ActionListener{
 	JButton level1but = new JButton("Level 1");
 	JButton level2but = new JButton("Level 2");
 	JButton level3but = new JButton("Level 3");
+	JTextField textMessage = new JTextField("MESSAGES");
 	//keeps track of current panel
 	String strCurrentPanel = ""; 
 	characters characterobject = new characters(0);
 	
 	//ssm data and JComponents(networking)
+	/**  Networking Components 
+	* Creates buttons for networking <br>
+	*/
 	JButton serverbut = new JButton("Server Mode");
 	JButton clientbut = new JButton("Client Mode");
 	JTextField IPinput = new JTextField();
@@ -58,10 +75,16 @@ public class mainprogram implements KeyListener, ActionListener{
 	int intPlayer;
 	
 	
+	
+	
 	// methods
 	public void actionPerformed(ActionEvent evt){
 	//network component (if messages are received)
 		if(evt.getSource() == ssm){
+			/** <h2> ssm line split <h2/>
+			 * This splits the data from ssm<br>
+			 * Data is used for a variety of other methods<br>
+			 */
 			/// Split
 			String strLine = ssm.readText();
 			strLineSplit = strLine.split(",");
@@ -91,12 +114,19 @@ public class mainprogram implements KeyListener, ActionListener{
 					}
 				}
 			//player gets assigned a colour
+			/** assign color 
+			 * Takes order number of when player enters server <br>
+			 * Assigns color based off of number<br>
+			 */
 			}else if(strLineSplit[0].equals("Number")){
 				if(strUser.equals(strLineSplit[1])){
 					intMyNumber = Integer.parseInt(strLineSplit[2]);
 					characters character = new characters(intMyNumber);
 					strMyColor = character.assigncolor();
 					System.out.println("Color"+strMyColor);
+					/**  color to txt 
+					* Takes user color and sends the appropraite color to a text document <br>
+					*/
 					//player name and color are sent to txt file
 					try{
                         PrintWriter assign = new PrintWriter(new FileWriter("UserColor.txt", true));
@@ -113,6 +143,10 @@ public class mainprogram implements KeyListener, ActionListener{
                     }
 				}
 			//sends message to switch panels for all characters
+			/**  Switches panels 
+			 * Takes level panel from host/server and sends to client <br>
+			 * Client switches local panel to level<br>
+			 */
 			}else if(strLineSplit[0].equals("level")){
 				System.out.println("Switching levels");
 				if(strLineSplit[1].equals("level1")){
@@ -133,6 +167,9 @@ public class mainprogram implements KeyListener, ActionListener{
 				}
 			
 			//receives location of each character
+			/** locations
+			 * takes location from client/host instance and prints to local game <br>
+			 */
 			}else if(strLineSplit[0].equals("location")){
 				if(strCurrentPanel.equals("level1")){
 					if(strLineSplit[1].equals("gray")){
@@ -177,10 +214,22 @@ public class mainprogram implements KeyListener, ActionListener{
 						level3panel.intPurpleY = Integer.parseInt(strLineSplit[3]);
 					}
 				}
+			/** messaging
+			* recieves chat messages <br>
+			* prints username of sender and mesage <br>
+			*/
+			// recieve text
+			}else if(strLineSplit[0].equals("message")){
+				textMessage.setText(strLineSplit[1]+": "+strLineSplit[2]);
 			}
+			
+			
 		}
 		
 		//player sends message of their location
+		/** send locations
+		* sends user location to other clients/host<br>
+		*/
 		if(evt.getSource() == thetimer){
 			if(strCurrentPanel.equals("level1")){
 				if(strMyColor.equals("gray")){
@@ -239,7 +288,10 @@ public class mainprogram implements KeyListener, ActionListener{
 				}
 			}
 		}
-		
+		/** Username input
+		* recieves chat messages <br>
+		* prints username of sender and mesage <br>
+		*/
 		// Username input
 		if(evt.getSource() == usernameinput){
 			strUser = usernameinput.getText();
@@ -254,6 +306,8 @@ public class mainprogram implements KeyListener, ActionListener{
 			blnHost = true;
 			serverbut.setEnabled(false);
 			clientbut.setEnabled(false);
+			textMessage.setEnabled(true);
+			textMessage.setText("");
 		// Client input
 		}else if(evt.getSource() == clientbut){
 			serverbut.setEnabled(false);
@@ -266,14 +320,21 @@ public class mainprogram implements KeyListener, ActionListener{
 			ssm.connect();
 			ssm.sendText("Connect,"+strUser);
 			IPinput.setEnabled(false);
+			textMessage.setEnabled(true);
+			textMessage.setText("");
 		}else if(evt.getSource() == readybut){
 			blnReady = true;
 			System.out.println("READY");
-		
+		// chat send
+		}else if(evt.getSource() == textMessage){
+			ssm.sendText("message,"+strUser+","+textMessage.getText());
+			textMessage.setText("");
 		}
 
 		//ready button sends user to second menu screen
-		
+		/** ready button
+		* sends host to second main menu panel<br>
+		*/
 		if(evt.getSource() == readybut){
 			theframe.setContentPane(mainmenu2);
 			theframe.pack();
@@ -284,7 +345,9 @@ public class mainprogram implements KeyListener, ActionListener{
 				theframe.add(levelselectbut);
 			}
 		}
-		
+		/** play game
+		* sends host to level 1<br>
+		*/
 		//selecting playgame brings players to level 1
 		else if(evt.getSource() == playgame){
 			strCurrentPanel = "level1";
@@ -295,7 +358,9 @@ public class mainprogram implements KeyListener, ActionListener{
 				ssm.sendText("level,"+strCurrentPanel);
 			}
 		}
-		
+		/** help
+		* brings players to tutorial<br>
+		*/
 		//selecting help brings players to tutorial
 		else if(evt.getSource() == thehelpscreenbut){
 			strCurrentPanel = "help";
@@ -303,6 +368,9 @@ public class mainprogram implements KeyListener, ActionListener{
 			theframe.pack();
 			theframe.requestFocus();
 		}
+		/** level select
+		* switches panel to level select panel<br>
+		*/
 		//selecting helps bring player to levelselect screen
 		else if(evt.getSource() == levelselectbut){
 			theframe.setContentPane(levelselectscreen);
@@ -342,7 +410,9 @@ public class mainprogram implements KeyListener, ActionListener{
 	}
 	
 	//player movement
-
+	/** <h2> Player Movement <h2/>
+	* Uses keys to determine the deflection of user character<br>
+	*/
 	public void keyReleased(KeyEvent evt){
 		//prevents movement after releasing key
 		if(evt.getKeyChar() == 'a'){
@@ -549,17 +619,6 @@ public class mainprogram implements KeyListener, ActionListener{
 			}
 		}
 		
-		if(evt.getKeyCode() == KeyEvent.VK_ENTER){
-			if(blnChat == false){
-				System.out.println("ENTER KEY");
-				thechat.setSize(200,200);
-				thechat.setLocation(0,0);
-				thechat.requestFocus();
-			}else if(blnChat == true){
-				thechat.setLocation(-100,-100);
-				theframe.requestFocus();
-			}
-		}
 	}
 	public void keyTyped(KeyEvent evt){
 		
@@ -569,7 +628,9 @@ public class mainprogram implements KeyListener, ActionListener{
 	public void paintComponent(Graphics g){
 		
 	}
-	
+	/** <h2> Jump <h2/>
+	* enables the jump physics after 'w' key is pressed <br>
+	*/
 	//part of jumping
 	public class thread implements Runnable{
 		public void run(){
@@ -629,29 +690,36 @@ public class mainprogram implements KeyListener, ActionListener{
 		theframe.setVisible(true);
 		theframe.addKeyListener(this);
 		
-		// readybut
-		readybut.setSize(150, 50);
-		readybut.setLocation(1100, 650);
-		readybut.addActionListener(this);
-		theframe.add(readybut);
 		
 		//help screen button from mainmenu2
+		/**  help button
+		* Sets Size, Location, Listener to the frame <br>
+		*/
 		thehelpscreenbut.setSize(350, 70);
 		thehelpscreenbut.setLocation(46, 20);
 		thehelpscreenbut.addActionListener(this);
 		
 		//play button from mainmenu2
+		/**  play button
+		* Sets Size, Location, Listener to the frame <br>
+		*/
 		playgame.setSize(350, 70);
 		playgame.setLocation(442, 20);
 		playgame.addActionListener(this);
 	
 		//level button from mainmenu2
+		/**  mainmenu2 button
+		* Sets Size, Location, Listener to the frame <br>
+		*/
 		levelselectbut.setSize(350, 70);
 		levelselectbut.setLocation(838, 20);
 		levelselectbut.addActionListener(this);
 		//theframe.add(levelselectbut);
 		
 		//level 1,2,and 3 buttons from level select
+		/**  level select buttons
+		* Sets Size, Location, Listener to the frame <br>
+		*/
 		level1but.setSize(310, 30);
 		level1but.setLocation(117, 570);
 		level1but.addActionListener(this);
@@ -670,6 +738,9 @@ public class mainprogram implements KeyListener, ActionListener{
 		//from mainmenu1
 		
 		// serverbut
+		/**  server button
+		* Sets Size, Location, Listener to the frame <br>
+		*/
 		serverbut.setSize(150, 50);
 		serverbut.setLocation(465, 650);
 		serverbut.addActionListener(this);
@@ -677,6 +748,9 @@ public class mainprogram implements KeyListener, ActionListener{
 		serverbut.setEnabled(false);
 		
 		// readybut
+		/**  ready button
+		* Sets Size, Location, Listener to the frame <br>
+		*/
 		readybut.setSize(150, 50);
 		readybut.setLocation(1100, 650);
 		readybut.addActionListener(this);
@@ -684,6 +758,9 @@ public class mainprogram implements KeyListener, ActionListener{
 		readybut.setEnabled(false);
 		
 		// clientbut
+		/**  client button
+		* Sets Size, Location, Listener to the frame <br>
+		*/
 		clientbut.setSize(150, 50);
 		clientbut.setLocation(665, 650);
 		clientbut.addActionListener(this);
@@ -691,6 +768,9 @@ public class mainprogram implements KeyListener, ActionListener{
 		clientbut.setEnabled(false);
 		
 		// IPinput
+		/**  IP text field
+		* Sets Size, Location, Listener to the frame <br>
+		*/
 		IPinput.setSize(300, 50);
 		IPinput.setLocation(750, 50);
 		IPinput.addActionListener(this);
@@ -698,20 +778,39 @@ public class mainprogram implements KeyListener, ActionListener{
 		IPinput.setEnabled(false);
 		
 		// IPlabel
+		/**  IP label
+		* Sets Size, Location to the frame <br>
+		*/
 		IPlabel.setSize(120, 50);
 		IPlabel.setLocation(650, 50);
 		theframe.add(IPlabel);
 		
 		// usernameinput
+		/**  username text field
+		* Sets Size, Location, Listener to the frame <br>
+		*/
 		usernameinput.setSize(300, 50);
 		usernameinput.setLocation(225, 50);
 		usernameinput.addActionListener(this);
 		theframe.add(usernameinput);
 		
 		// theusername
+		/**  username label
+		* Sets Size, Location to the frame <br>
+		*/
 		theusername.setSize(120, 50);
 		theusername.setLocation(150, 50);
 		theframe.add(theusername);
+		
+		// chat
+		/**  Chat text field
+		* Sets Size, Location, Listener to the frame <br>
+		*/
+		textMessage.setLocation(1150, 350);
+		textMessage.setSize(100, 200);
+		textMessage.addActionListener(this);
+		theframe.add(textMessage);
+		textMessage.setEnabled(false);
 		
 		thetimer.start();
 		
