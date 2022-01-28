@@ -754,7 +754,7 @@ public class mainprogram implements KeyListener, ActionListener{
 		readybut.setSize(150, 50);
 		readybut.setLocation(1100, 650);
 		readybut.addActionListener(this);
-		
+		theframe.add(readybut);
 		readybut.setEnabled(false);
 		
 		// clientbut
